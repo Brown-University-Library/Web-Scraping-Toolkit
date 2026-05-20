@@ -127,7 +127,7 @@ If all tests pass, your environment is set up correctly.
 
 ---
 
-## Ethical considerations
+## Considerations
 
 Web scraping is a powerful tool, but it comes with responsibilities:
 
