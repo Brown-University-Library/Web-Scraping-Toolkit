@@ -6,13 +6,13 @@ This toolkit helps you go from **a research question** to **a usable text datase
 
 | I want to…                                      | Start here                                                        |
 |--------------------------------------------------|-------------------------------------------------------------------|
-| Collect articles from **The New York Times**     | [NYT Workflow →](New%20York%20Times%20Scraping.md)                |
-| Collect articles from **The Guardian**           | [Guardian Workflow →](Guardian%20Collection%20Workflow.md)         |
+| Collect articles from **The New York Times**     | [NYT Workflow →](NYT-Scraping-Workflow.md)                |
+| Collect articles from **The Guardian**           | [Guardian Workflow →](Guardian-Collection-Workflow.md.md)         |
 | Download full-text items from **Archive.org**    | [Internet Archive Workflow →](Internet-Archive-API-Workflow.md)   |
-| Learn **web scraping from scratch** with Python  | [Beautiful Soup Tutorial →](V2-Getting%20Started%20with%20Beautiful%20Soup.md) |
+| Learn **web scraping from scratch** with Python  | [Beautiful Soup Tutorial →](Beautiful-Soup-Tutorial.md.md) |
 | Split a spreadsheet into **individual text files** for analysis | [Spreadsheet Splitting →](Spreadsheet-Splitting-Workflow.md) |
 
-> **New to all of this?** Start with the [Beautiful Soup Tutorial](V2-Getting%20Started%20with%20Beautiful%20Soup.md). It introduces the core concepts of web scraping through hands-on examples, and the skills you learn there will help you understand every other workflow in this toolkit.
+> **New to all of this?** Start with the [Beautiful Soup Tutorial](Beautiful-Soup-Tutorial.md.md). It introduces the core concepts of web scraping through hands-on examples, and the skills you learn there will help you understand every other workflow in this toolkit.
 
 ---
 
@@ -20,7 +20,7 @@ This toolkit helps you go from **a research question** to **a usable text datase
 
 Most workflows in this toolkit follow the same general pattern:
 
-```
+```text
 1. SEARCH        →  2. COLLECT URLs  →  3. SCRAPE full text  →  4. ANALYZE
    (use an API        (save results       (visit each URL,        (text mining,
    to find articles)   as a CSV file)      extract the text)       topic modeling, etc.)
@@ -76,14 +76,14 @@ The NYT workflow has two phases: **searching** for articles using the NYT Archiv
 
 | Scraper                  | When to use it                                                    | How it works                      |
 |--------------------------|-------------------------------------------------------------------|-----------------------------------|
-| `Code/nytscraper.py`     | Learning the pipeline; OK with some pages being unavailable       | Simple HTTP requests (no login)   |
-| `Code/nytscraper_login.py` | You have an NYT subscription and want full article text         | Logs in with a real browser       |
+| `code/nytscraper.py`     | Learning the pipeline; OK with some pages being unavailable       | Simple HTTP requests (no login)   |
+| `code/nytscraper_login.py` | You have an NYT subscription and want full article text         | Logs in with a real browser       |
 
 Both scrapers read URLs from `nytlinks.csv` and write results to `articlefulltext.csv`.
 
 > **Note:** Many NYT pages require JavaScript and sit behind a paywall. The basic scraper will mark these as `[UNAVAILABLE]` rather than silently saving error text. For best results, use the login scraper with a valid NYT account.
 
-📖 **[Full NYT workflow guide →](New%20York%20Times%20Scraping.md)**
+📖 **[Full NYT workflow guide →](NYT-Scraping-Workflow.md)**
 
 ### The Guardian
 
@@ -91,9 +91,9 @@ The Guardian workflow uses the Guardian's open API to search for articles, then 
 
 1. Search the [Guardian API Explorer](http://open-platform.theguardian.com/explore/) and copy the JSON results
 2. Save the JSON as `query_result.json`
-3. Run `Code/guardian_scraping.py` to scrape full text into `guardian_results.csv`
+3. Run `code/guardian_scraping.py` to scrape full text into `guardian_results.csv`
 
-📖 **[Full Guardian workflow guide →](Guardian%20Collection%20Workflow.md)**
+📖 **[Full Guardian workflow guide →](Guardian-Collection-Workflow.md.md)**
 
 ### Internet Archive
 
@@ -105,7 +105,7 @@ If your source material lives on Archive.org, this workflow shows you how to use
 
 A hands-on introduction to web scraping with Python. You'll learn to extract links, filter results, scrape text, and save structured data to CSV — all using a practice website designed for learning.
 
-📖 **[Start the tutorial →](V2-Getting%20Started%20with%20Beautiful%20Soup.md)**
+📖 **[Start the tutorial →](Beautiful-Soup-Tutorial.md.md)**
 
 ### Spreadsheet splitting
 
@@ -132,8 +132,7 @@ If all tests pass, your environment is set up correctly.
 Web scraping is a powerful tool, but it comes with responsibilities:
 
 - **Respect terms of service.** Always review a site's ToS before scraping. The NYT, Guardian, and most major publications have terms governing automated access.
-- **Check `robots.txt`.** Most websites publish a `robots.txt` file (e.g., `https://www.nytimes.com/robots.txt`) that specifies which pages can be accessed by automated tools.
-- **Be gentle with servers.** Include delays between requests (the scrapers in this toolkit do this). Hammering a server with rapid requests can disrupt service for everyone.
+- **Check `robots.txt`.** Most websites publish a `robots.txt` file, for example `https://www.nytimes.com/robots.txt`, that specifies which pages can be accessed by automated tools.
+- **Be gentle with servers.** Include delays between requests. The scrapers in this toolkit do this. Hammering a server with rapid requests can disrupt service for everyone.
 - **Use APIs when available.** APIs are the *intended* way to access data programmatically. Scraping HTML should be a fallback, not a first choice.
 - **Respect copyright.** Collecting text for research is often covered by fair use, but redistribution may not be. Consult your institution's policies.
-
