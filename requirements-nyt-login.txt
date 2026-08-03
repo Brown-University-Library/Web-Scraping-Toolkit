@@ -1,0 +1,5 @@
+# For the basic NYT workflow (nytscraper.py): requests, bs4, lxml (see main workflow doc).
+# For the login-based scraper (nytscraper_login.py) only:
+playwright>=1.40.0
+# Optional: so you can put NYT_EMAIL and NYT_PASSWORD in a .env file instead of exporting:
+# python-dotenv>=1.0.0

@@ -3,57 +3,50 @@
     # following columns: the article title, the date, the url, and the full
     # text of the article
 
-import json
 import csv
+import json
+
 import requests
 from bs4 import BeautifulSoup
 
-# load and parse the json file
-query_json = open("query_result.json")
-parsed_query = json.load(query_json)
 
-# create a list containing the individual result json bits
-results = parsed_query["response"]["results"]
+def scrape_guardian_articles(
+    input_path: str = "query_result.json", output_path: str = "guardian_results.csv"
+) -> None:
+    """
+    Read a Guardian API search result JSON file and write title, date, URL,
+    and full text for each article to output_path.
+    """
+    with open(input_path, "r") as query_json:
+        parsed_query = json.load(query_json)
 
-# open the csv file so that we can write to it
-with open("guardian_results.csv", "w") as file:
-    # Create a writer
-    writer = csv.writer(file)
-    # Create a header row
-    writer.writerow([
-        "title",
-        "date",
-        "url",
-        "full text"
-    ])
+    results = parsed_query["response"]["results"]
 
-    # iterate through each entry, adding it to the csv and fetching the
-    # full text of its article.
-    for result in results:
-        # assign data from json to variables
-        title = result["webTitle"]
-        date = result["webPublicationDate"]
-        date = date[:10] #trim off extra time information
-        url = result["webUrl"]
+    with open(output_path, "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["title", "date", "url", "full text"])
 
-        # Go and Scrape the article's text
-        # set up an object to visit the page
-        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36'}
-        response = requests.get(url, headers=headers)
-        page_soup = BeautifulSoup(response.content, features="lxml")
+        for result in results:
+            title = result["webTitle"]
+            date = result["webPublicationDate"][:10]
+            url = result["webUrl"]
 
-        # add the contents of the new article to collected
-        full_text = ""
+            headers = {
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
+                )
+            }
+            response = requests.get(url, headers=headers)
+            page_soup = BeautifulSoup(response.content, features="lxml")
 
-        for x in page_soup.find_all('p'):
-            full_text = full_text + x.get_text() + "\n"
+            full_text = ""
+            for x in page_soup.find_all("p"):
+                full_text = full_text + x.get_text() + "\n"
 
-        # write the variables to the spreadsheet as a new row
-        writer.writerow([
-            title,
-            date,
-            url,
-            full_text
-        ])
+            writer.writerow([title, date, url, full_text])
 
-print("Done Scraping!")
+
+if __name__ == "__main__":
+    scrape_guardian_articles()
+    print("Done Scraping!")
