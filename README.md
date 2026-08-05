@@ -4,12 +4,12 @@
 
 This toolkit helps you go from **a research question** to **a usable text dataset**. Here are the main things you can do:
 
-| I want to…                                      | Start here                                                        |
-|--------------------------------------------------|-------------------------------------------------------------------|
-| Collect articles from **The New York Times**     | [NYT Workflow →](NYT-Scraping-Workflow.md)                |
-| Collect articles from **The Guardian**           | [Guardian Workflow →](Guardian-Collection-Workflow.md.md)         |
-| Download full-text items from **Archive.org**    | [Internet Archive Workflow →](Internet-Archive-API-Workflow.md)   |
-| Learn **web scraping from scratch** with Python  | [Beautiful Soup Tutorial →](Beautiful-Soup-Tutorial.md.md) |
+| I want to… | Start here |
+|---|---|
+| Collect articles from **The New York Times** | [NYT Workflow →](NYT-Scraping-Workflow.md) |
+| Collect articles from **The Guardian** | [Guardian Workflow →](Guardian-Collection-Workflow.md.md) |
+| Download full-text items from **Archive.org** | [Internet Archive Workflow →](Internet-Archive-API-Workflow.md) |
+| Learn **web scraping from scratch** with Python | [Beautiful Soup Tutorial →](Beautiful-Soup-Tutorial.md.md) |
 | Split a spreadsheet into **individual text files** for analysis | [Spreadsheet Splitting →](Spreadsheet-Splitting-Workflow.md) |
 
 > **New to all of this?** Start with the [Beautiful Soup Tutorial](Beautiful-Soup-Tutorial.md.md). It introduces the core concepts of web scraping through hands-on examples, and the skills you learn there will help you understand every other workflow in this toolkit.
@@ -26,7 +26,7 @@ Most workflows in this toolkit follow the same general pattern:
    to find articles)   as a CSV file)      extract the text)       topic modeling, etc.)
 ```
 
-For example, the NYT workflow uses the NYT Archive API to search for articles (step 1), saves the matching URLs into a CSV (step 2), then runs a Python scraper to visit each URL and download the full article text (step 3). You then take the resulting dataset into whatever analysis tool you prefer (step 4).
+For example, the NYT workflow uses the NYT Archive API to search for articles (step 1), saves the matching URLs into a CSV (step 2), then runs a Python scraper to visit each URL and attempt to collect the article text (step 3). You then take the resulting dataset into whatever analysis tool you prefer (step 4).
 
 The toolkit covers steps 1–3. For step 4, check out the library's [resources on text mining](https://library.brown.edu/).
 
@@ -35,32 +35,33 @@ The toolkit covers steps 1–3. For step 4, check out the library's [resources o
 ## Prerequisites
 
 ### Python
-You'll need **Python 3.8 or newer**. If you don't have it installed, download it from [python.org](https://www.python.org/downloads/).
+
+You'll need **Python 3.10 or newer**. If you don't have it installed, download it from [python.org](https://www.python.org/downloads/).
 
 ### Install dependencies
 
-Open **Terminal** (Mac/Linux) or **Command Prompt** (Windows), navigate to the folder where you cloned or downloaded this toolkit, and run:
+Open **Terminal** on macOS/Linux or **Command Prompt** on Windows, navigate to the folder where you cloned or downloaded this toolkit, and run:
 
 ```bash
 python3 -m pip install -r requirements.txt
 ```
 
-> **Tip:** On some systems, `pip install -r requirements.txt` works instead. If you get a "permission denied" error, try adding `sudo` before the command (Mac/Linux) or running your terminal as Administrator (Windows).
+> **Tip:** On some systems, `pip install -r requirements.txt` works instead. If you get a permission error, create and activate a Python virtual environment before installing the dependencies.
 
-This installs everything you need for all the workflows:
+This installs the dependencies used by the basic scraping workflows:
 
 - `requests` — lets Python download web pages
 - `beautifulsoup4` — parses HTML so you can extract text and links
 - `lxml` — a fast HTML parser that works with BeautifulSoup
-- `playwright` — drives a real browser (only needed for the NYT login scraper)
-- `python-dotenv` — loads credentials from a file (only needed for the NYT login scraper)
-- `pytest` — runs the automated tests
 
-If you plan to use the **NYT login-based scraper**, you'll also need to install a browser for Playwright:
+The NYT login-based scraper has additional dependencies. Install them separately with:
 
 ```bash
+python3 -m pip install -r requirements-nyt-login.txt
 python3 -m playwright install chromium
 ```
+
+The optional `python-dotenv` package lets the login scraper load credentials from a local `.env` file.
 
 ---
 
@@ -68,20 +69,45 @@ python3 -m playwright install chromium
 
 ### New York Times
 
-The NYT workflow has two phases: **searching** for articles using the NYT Archive API, and **scraping** the full text of those articles.
+The NYT workflow has two phases: **searching** for articles using the NYT Archive API and **scraping** the article text.
 
-**Searching:** You'll use [Frank Donnelly's script](https://github.com/Brown-University-Library/geodata_api_tutorials/blob/main/nytimes/nyt_archives_api.py) from the Brown University Library, which queries the NYT Archive API and saves matching article metadata (including URLs) to a CSV file.
+**Searching:** You'll use [Frank Donnelly's script](https://github.com/Brown-University-Library/geodata_api_tutorials/blob/main/nytimes/nyt_archives_api.py) from the Brown University Library. It queries the NYT Archive API and saves matching article metadata, including URLs, to a CSV file.
 
 **Scraping:** You then feed those URLs into one of two scrapers:
 
-| Scraper                  | When to use it                                                    | How it works                      |
-|--------------------------|-------------------------------------------------------------------|-----------------------------------|
-| `code/nytscraper.py`     | Learning the pipeline; OK with some pages being unavailable       | Simple HTTP requests (no login)   |
-| `code/nytscraper_login.py` | You have an NYT subscription and want full article text         | Logs in with a real browser       |
+| Scraper | When to use it | How it works |
+|---|---|---|
+| `code/nytscraper.py` | Learning the pipeline; okay with some pages being unavailable | Simple HTTP requests without login |
+| `code/nytscraper_login.py` | You have an NYT subscription and want to attempt authenticated collection | Logs in with a Playwright-controlled browser |
 
 Both scrapers read URLs from `nytlinks.csv` and write results to `articlefulltext.csv`.
 
-> **Note:** Many NYT pages require JavaScript and sit behind a paywall. The basic scraper will mark these as `[UNAVAILABLE]` rather than silently saving error text. For best results, use the login scraper with a valid NYT account.
+> **Note:** Many NYT pages require JavaScript and sit behind a paywall. The basic scraper will mark these as `[UNAVAILABLE]` rather than silently saving error text. A valid subscription may improve access, but the login scraper is not guaranteed to retrieve every page. NYT login screens, page selectors, CAPTCHA requirements, and terms of access can change.
+
+#### Run the Playwright login scraper
+
+1. Create `nytlinks.csv` in the repository root, with one article URL per row. A header named `Article Url` is optional.
+
+2. Set your NYT credentials as environment variables. Do not put credentials in the script or commit them to Git:
+
+   ```bash
+   export NYT_EMAIL="you@example.com"
+   export NYT_PASSWORD="your-password"
+   ```
+
+3. From the repository root, run:
+
+   ```bash
+   python3 code/nytscraper_login.py --input nytlinks.csv --output articlefulltext.csv
+   ```
+
+4. If login requires 2FA, CAPTCHA, or another manual step, display the browser:
+
+   ```bash
+   python3 code/nytscraper_login.py --headed --input nytlinks.csv --output articlefulltext.csv
+   ```
+
+The output is written to `articlefulltext.csv`. For script-level details, see [`code/readme.md`](code/readme.md).
 
 📖 **[Full NYT workflow guide →](NYT-Scraping-Workflow.md)**
 
@@ -89,9 +115,9 @@ Both scrapers read URLs from `nytlinks.csv` and write results to `articlefulltex
 
 The Guardian workflow uses the Guardian's open API to search for articles, then scrapes the full text from each result.
 
-1. Search the [Guardian API Explorer](http://open-platform.theguardian.com/explore/) and copy the JSON results
-2. Save the JSON as `query_result.json`
-3. Run `code/guardian_scraping.py` to scrape full text into `guardian_results.csv`
+1. Search the [Guardian API Explorer](http://open-platform.theguardian.com/explore/) and copy the JSON results.
+2. Save the JSON as `query_result.json`.
+3. Run `code/guardian_scraping.py` to scrape full text into `guardian_results.csv`.
 
 📖 **[Full Guardian workflow guide →](Guardian-Collection-Workflow.md.md)**
 
@@ -103,13 +129,13 @@ If your source material lives on Archive.org, this workflow shows you how to use
 
 ### Beautiful Soup tutorial
 
-A hands-on introduction to web scraping with Python. You'll learn to extract links, filter results, scrape text, and save structured data to CSV — all using a practice website designed for learning.
+A hands-on introduction to web scraping with Python. You'll learn to extract links, filter results, scrape text, and save structured data to CSV using a practice website designed for learning.
 
 📖 **[Start the tutorial →](Beautiful-Soup-Tutorial.md.md)**
 
 ### Spreadsheet splitting
 
-Once you have your data in a spreadsheet, you may want to split it into individual text files (one per row) for text analysis tools. This workflow shows you how using the command line.
+Once you have your data in a spreadsheet, you may want to split it into individual text files, with one file per row, for use in text-analysis tools.
 
 📖 **[Spreadsheet splitting guide →](Spreadsheet-Splitting-Workflow.md)**
 
@@ -117,13 +143,13 @@ Once you have your data in a spreadsheet, you may want to split it into individu
 
 ## Running the tests
 
-The toolkit includes automated tests to verify that the scrapers work correctly. The tests don't hit any real websites — they use mock data so you can run them offline.
+The toolkit includes automated tests for URL parsing, article-text extraction, error handling, and the expected Playwright login sequence. The tests don't contact real websites or authenticate with a real NYT account; they use mock data so you can run them offline.
 
 ```bash
 pytest
 ```
 
-If all tests pass, your environment is set up correctly.
+Passing tests confirms the offline code paths. A real authenticated collection should still be tested manually with a valid NYT account because the live login flow, 2FA/CAPTCHA requirements, and page structure can change.
 
 ---
 
@@ -131,8 +157,8 @@ If all tests pass, your environment is set up correctly.
 
 Web scraping is a powerful tool, but it comes with responsibilities:
 
-- **Respect terms of service.** Always review a site's ToS before scraping. The NYT, Guardian, and most major publications have terms governing automated access.
-- **Check `robots.txt`.** Most websites publish a `robots.txt` file, for example `https://www.nytimes.com/robots.txt`, that specifies which pages can be accessed by automated tools.
-- **Be gentle with servers.** Include delays between requests. The scrapers in this toolkit do this. Hammering a server with rapid requests can disrupt service for everyone.
-- **Use APIs when available.** APIs are the *intended* way to access data programmatically. Scraping HTML should be a fallback, not a first choice.
-- **Respect copyright.** Collecting text for research is often covered by fair use, but redistribution may not be. Consult your institution's policies.
+- **Respect terms of service.** Always review a site's terms before scraping. The NYT, Guardian, and most major publications have terms governing automated access.
+- **Check `robots.txt`.** Most websites publish a `robots.txt` file, such as `https://www.nytimes.com/robots.txt`, that specifies which pages may be accessed by automated tools.
+- **Be gentle with servers.** For larger collections, add appropriate delays and retry limits instead of sending rapid requests.
+- **Use APIs when available.** APIs are the intended way to access data programmatically. Scraping HTML should generally be a fallback.
+- **Respect copyright.** Collecting text for research may be covered by fair use, but redistribution may not be. Consult your institution's policies.
