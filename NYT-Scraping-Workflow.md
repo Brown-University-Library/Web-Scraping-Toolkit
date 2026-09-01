@@ -8,7 +8,7 @@ This workflow explains how to:
 2. Filter the results for a topic and save the matching article URLs.
 3. Attempt to collect article text with either the basic scraper or the Playwright login scraper.
 
-The Archive API returns article metadata rather than full article text. The scraping stage visits the returned URLs separately. Access to article text depends on the page, your subscription, NYT's terms and technical controls, and the current website structure.
+The Archive API returns article metadata rather than full article text. The scraping stage visits the returned URLs separately. Access to article text depends on the page, your subscription, NYT's terms and technical controls, and the current website structure. **Please note that as of the last update to this toolkit in August 2026, NYT bot detection is very robust and blocks most attempts to scrape with automated methods, meaning that you can retrieve article metadata but likely not full text**
 
 ---
 
