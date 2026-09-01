@@ -246,7 +246,7 @@ Passing tests confirms the offline code paths. The tests do not contact NYT or v
 
 ## 9. Responsible use and troubleshooting
 
-- Review the NYT's current [Terms of Service](https://help.nytimes.com/115014893428-Terms-of-Service#3-user-generated-content-submissions-including-comments-reader-reviews-and-more-protections-from-illegal-content-2), the [API Terms of Service](https://developer.nytimes.com/terms), and `robots.txt` before collecting pages.
+- Review the NYT's current [Terms of Service](https://help.nytimes.com/115014893428-Terms-of-Service), the [API Terms of Service](https://developer.nytimes.com/terms), and `robots.txt` before collecting pages.
 - Use official APIs when they provide the data you need.
 - Add appropriate delays and retry limits for larger collections.
 - Do not redistribute copyrighted article text without confirming that you have permission.
@@ -260,6 +260,11 @@ Passing tests confirms the offline code paths. The tests do not contact NYT or v
 
 To explore possible uses of the collected article data, see the Brown University Library's [resources on text mining](https://library.brown.edu/).
 
-## Special credits
+## Credits
 
+The following individuals created or worked on this web scraping workflow:
+Ashley Champagne
+Yifan Lu
+Na Ngyuen
+Tarika Sankar
 The Archive API search stage is based on work by Frank Donnelly, GIS and Data Librarian at Brown University Library. The scraping examples in this toolkit demonstrate separate approaches for unauthenticated HTML requests and authenticated browser automation.
