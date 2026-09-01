@@ -246,7 +246,7 @@ Passing tests confirms the offline code paths. The tests do not contact NYT or v
 
 ## 9. Responsible use and troubleshooting
 
-- Review the NYT's current terms of service and `robots.txt` before collecting pages.
+- Review the NYT's current [Terms of Service](https://help.nytimes.com/115014893428-Terms-of-Service#3-user-generated-content-submissions-including-comments-reader-reviews-and-more-protections-from-illegal-content-2), the [API Terms of Service](https://developer.nytimes.com/terms), and `robots.txt` before collecting pages.
 - Use official APIs when they provide the data you need.
 - Add appropriate delays and retry limits for larger collections.
 - Do not redistribute copyrighted article text without confirming that you have permission.
