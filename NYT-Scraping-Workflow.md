@@ -21,7 +21,15 @@ You will need:
 - A valid NYT subscription if you use the authenticated Playwright scraper
 - A text editor and Terminal on macOS/Linux or Command Prompt/PowerShell on Windows
 
-Clone or download this toolkit, open a terminal in its root directory, and install the basic dependencies:
+Clone or download this toolkit. You can work within Github or click the green "Code" button at the top of the repository and "download zip." Make sure to unzip the folder in a location of your choosing on your computer.
+
+Navigate to this folder in your terminal using the "cd" (change directory) command followed by the file path (you can right click on the toolkit folder in your file system and copy address as text.") For example, if I unzipped the Web Scraping Toolkit in my Documents, I would type this in the terminal:
+
+```bash
+cd C:\Users\tsankar\Documents\Web-Scraping-Toolkit-master
+```
+
+Once you've opened a terminal in the root directory, install the basic dependencies:
 
 ```bash
 python3 -m pip install -r requirements.txt
