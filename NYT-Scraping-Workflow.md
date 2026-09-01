@@ -29,6 +29,8 @@ Navigate to this folder in your terminal using the "cd" (change directory) comma
 cd C:\Users\tsankar\Documents\Web-Scraping-Toolkit-master
 ```
 
+This will be your "working directory" from now on.
+
 Once you've opened a terminal in the root directory, install the basic dependencies:
 
 ```bash
@@ -74,7 +76,7 @@ The developer API key is only used to retrieve metadata. It does not provide sub
 
 Frank Donnelly's archive script reads the API key from a plain-text file named `nyt_key.txt`.
 
-Create `nyt_key.txt` in the same directory as `nyt_archives_api.py`, paste only the API key into it, and save the file.
+Create `nyt_key.txt` in the same directory as the Web Scraping Toolkit, paste only the API key into it, and save the file.
 
 > **Security:** Do not commit `nyt_key.txt`, `.env`, passwords, or other credentials to Git. Confirm that credential files are covered by `.gitignore` before committing.
 
@@ -87,7 +89,7 @@ The metadata-search stage uses Frank Donnelly's [`nyt_archives_api.py`](https://
 You can either:
 
 - Download the complete `geodata_api_tutorials` repository as a ZIP file and extract it, or
-- Open the linked script on GitHub and save only `nyt_archives_api.py` into your working directory.
+- Open the script on GitHub from the above link and save only `nyt_archives_api.py` into your working directory.
 
 Keep `nyt_key.txt` in the same directory as the script.
 
@@ -117,7 +119,7 @@ python nyt_archives_api.py
 
 The script writes a CSV file in the same directory with a name such as `nyt_extracts_1.csv`; the number may vary. This file will contain the matching article metadata collected using the Archive API, with columns for headline,	byline,	pub_date,	abstract,	lead_paragraph, word_count,	uri, and	web_url. See the [Archive API documentation](https://developer.nytimes.com/docs/archive-product/1/overview) (Overview > Resource Types) for more information on these fields.  
 
-There are many interesting research questions you can investigate with this data. If you wish to attempt to collect article full-text, proceed to step #5, but depending on the current NYT Terms of Use, this may not be possible.
+There are many interesting research questions you can investigate with this data. If you wish to attempt to collect article full-text, proceed to steps  #5-6, but depending on the current NYT Terms of Use, this may not be possible.
 ---
 
 ## 5. Prepare `nytlinks.csv`
@@ -160,7 +162,7 @@ When a page appears to require JavaScript, login, or paywall access, the result 
 
 ### 6b. Playwright scraper with NYT login
 
-The login scraper launches Chromium, signs in with credentials supplied through the environment, and visits each article in the authenticated browser session.
+The login scraper launches Chromium, signs in with credentials supplied through the environment, and visits each article in the authenticated browser session. To obtain a NYT Academic Pass using your Brown University credentials, [follow these instructions.](https://library.brown.edu/info/eresources/nytimes/)
 
 #### Set credentials on macOS or Linux
 
@@ -174,6 +176,13 @@ export NYT_PASSWORD="your-password"
 ```powershell
 $env:NYT_EMAIL="you@example.com"
 $env:NYT_PASSWORD="your-password"
+```
+
+#### Set credentials in Windows Command Prompt
+
+```
+set NYT_EMAIL=[Brown email]
+set NYT_PASSWORD=[password you set]
 ```
 
 #### Optional `.env` file
