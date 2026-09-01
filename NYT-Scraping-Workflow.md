@@ -8,7 +8,7 @@ This workflow explains how to:
 2. Filter the results for a topic and save the matching article URLs.
 3. Attempt to collect article text with either the basic scraper or the Playwright login scraper.
 
-The Archive API returns article metadata rather than full article text. The scraping stage visits the returned URLs separately. Access to article text depends on the page, your subscription, NYT's terms and technical controls, and the current website structure. **Please note that as of the last update to this toolkit in August 2026, NYT bot detection is very robust and blocks most attempts to scrape with automated methods, meaning that you can retrieve article metadata but likely not full text**
+The Archive API returns article metadata rather than full article text. The scraping stage visits the returned URLs separately. Access to article text depends on the page, your subscription, NYT's terms and technical controls, and the current website structure. **Please note that as of the last update to this toolkit in August 2026, NYT bot detection is very robust and blocks most attempts to scrape with automated methods, meaning that you can retrieve article metadata but likely not full text.**
 
 ---
 
@@ -72,7 +72,7 @@ Create `nyt_key.txt` in the same directory as `nyt_archives_api.py`, paste only 
 
 ---
 
-## 4. Search the NYT Archive API
+## 4. Search the NYT Archive API and collect article metadata
 
 The metadata-search stage uses Frank Donnelly's [`nyt_archives_api.py`](https://github.com/Brown-University-Library/geodata_api_tutorials/blob/main/nytimes/nyt_archives_api.py) script.
 
@@ -107,8 +107,9 @@ On systems where the Python command is `python`, use:
 python nyt_archives_api.py
 ```
 
-The script writes a CSV file in the same directory with a name such as `nyt_extracts_1.csv`; the number may vary. This file contains the matching article metadata and URLs.
+The script writes a CSV file in the same directory with a name such as `nyt_extracts_1.csv`; the number may vary. This file will contain the matching article metadata collected using the Archive API, with columns for headline,	byline,	pub_date,	abstract,	lead_paragraph, word_count,	uri, and	web_url. See the [Archive API documentation](https://developer.nytimes.com/docs/archive-product/1/overview) (Overview > Resource Types) for more information on these fields.  
 
+There are many interesting research questions you can investigate with this data. If you wish to attempt to collect article full-text, proceed to step #5, but depending on the current NYT Terms of Use, this may not be possible.
 ---
 
 ## 5. Prepare `nytlinks.csv`
