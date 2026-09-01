@@ -23,7 +23,7 @@ You will need:
 
 Clone or download this toolkit. You can work within Github or click the green "Code" button at the top of the repository and "download zip." Make sure to unzip the folder in a location of your choosing on your computer.
 
-Navigate to this folder in your terminal using the "cd" (change directory) command followed by the file path (you can right click on the toolkit folder in your file system and copy address as text.") For example, if I unzipped the Web Scraping Toolkit in my Documents, I would type this in the terminal:
+Navigate to this folder in your terminal using the "cd" (change directory) command followed by the file path (you can right click on the toolkit folder in your file system and "copy address as text.") For example, if I unzipped the Web Scraping Toolkit in my Documents, I would type this in the terminal:
 
 ```bash
 cd C:\Users\tsankar\Documents\Web-Scraping-Toolkit-master
