@@ -51,7 +51,6 @@ webUrl:" ``` with nothing and then ```"``` with nothing. This will leave you wit
 4. Try running the code by clicking the arrow next to each cell block. If you get errors, ask Gemini to troubleshoot them.
    Here is a sample script that Gemini created in response to my prompt. You may get different results due to the nature of generative AI
 
-```
    # First, let's install the necessary libraries: `requests` for making HTTP requests and `BeautifulSoup` for parsing HTML.
   ```
    pip install requests beautifulsoup4 pandas
@@ -61,8 +60,7 @@ webUrl:" ``` with nothing and then ```"``` with nothing. This will leave you wit
   import requests
   from bs4 import BeautifulSoup
   import pandas as pd
-  ```
-  ```
+
 urls_file = "/content/urls.txt"
 url_list = []
 
@@ -79,8 +77,8 @@ except FileNotFoundError:
 except Exception as e:
     print(f"An error occurred while reading the URLs file: {e}")
     url_list = []
-```
-    # Next, we'll define a function to scrape the text content from a given URL. This function will attempt to extract meaningful text from common HTML elements like paragraphs (`<p>`) and headings (`<h1>` to `<h6>`).
+  ```
+  # Next, we'll define a function to scrape the text content from a given URL. This function will attempt to extract meaningful text from common HTML elements like paragraphs (`<p>`) and headings (`<h1>` to `<h6>`).
 
   ```
     def scrape_article_text(url):
@@ -108,7 +106,8 @@ except Exception as e:
         # Clean up multiple spaces and newlines
         text = ' '.join(text.split())
         return text
-
+```
+```
     except requests.exceptions.Timeout:
         return f"Error: Request timed out for {url}"
     except requests.exceptions.RequestException as e:
@@ -128,12 +127,12 @@ if url_list:
 else:
     print("No URLs to scrape.")
   ```
-  ```
 # Display a preview of the scraped data
+```
 if scraped_data:
     display(pd.DataFrame(scraped_data).head())
-  ```
-    # Finally, we'll convert the collected data into a pandas DataFrame and export it to a CSV file named `scraped_articles.csv`.
+```
+  # Finally, we'll convert the collected data into a pandas DataFrame and export it to a CSV file named `scraped_articles.csv`.
   ```
     if scraped_data:
     df_scraped = pd.DataFrame(scraped_data)
@@ -143,7 +142,6 @@ if scraped_data:
 else:
     print("No data to save to CSV.")
   ```
-```
     
 6. Gemini/Colab will create a csv file called "scraped_articles.csv" or something similar in the file system on the left. You can download it and inspect the results. You should see an output like this:
 
