@@ -43,29 +43,109 @@
 webUrl:" ``` with nothing and then ```"``` with nothing. This will leave you with a visible column of URLs without extraneous matter.  
 1. Finally, copy the column of URLs, excluding any rows with only a curly bracket, and save to a text file called "urls.txt" in your working data.
 
-### 2. Scrape articles using ChatGPT and Google Colab
+### 2. Scrape full text of articles using GenAI and Google Colab
 
-Scraping (Phase 1): Initial Scrape
+1. Open a new [Colab notebook](https://colab.research.google.com/)
+2. Click the folder icon on the left side bar and upload your urls.txt file (note that this file will be deleted after the runtime of this Colab notebook)
+3. Within Colab, ask Gemini to scrape the full text from articles using the urls.txt file uploaded to the colaboratory, and export the results to a csv
+4. Try running the code by clicking the arrow next to each cell block. If you get errors, ask Gemini to troubleshoot them.
+   Here is a sample script that Gemini created in response to my prompt. You may get different results due to the nature of generative AI
 
-1. #### *Get full text articles*
+   ```
+   # First, let's install the necessary libraries: `requests` for making HTTP requests and `BeautifulSoup` for parsing HTML.
+   pip install requests beautifulsoup4 pandas
 
-   * Ask ChatGPT:  
-     * write a python script to web scrape the content from articles in a text file called guardian\_urls.txt  
-       * Open a new [Colab notebook](https://colab.research.google.com/)   
-       * Paste the code from ChatGPT into Colab  
-       * If you get errors, put those into ChatGPT and ask it to revise your script  
-       * Finally, export your results to Excel by asking ChatGPT: “Thank you\! Can you help me export the results to Excel?”  
-       * You should see an output like this:
+   # Now, let's import the libraries and read the URLs from your `urls.txt` file.
+   import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+urls_file = "/content/urls.txt"
+url_list = []
+
+try:
+    with open(urls_file, 'r') as f:
+        for line in f:
+            url = line.strip()
+            if url:
+                url_list.append(url)
+    print(f"Successfully loaded {len(url_list)} URLs from {urls_file}")
+except FileNotFoundError:
+    print(f"Error: The file '{urls_file}' was not found. Please make sure you have uploaded 'urls.txt' to Colab.")
+    url_list = [] # Ensure url_list is empty if file not found
+except Exception as e:
+    print(f"An error occurred while reading the URLs file: {e}")
+    url_list = []
+
+    # Next, we'll define a function to scrape the text content from a given URL. This function will attempt to extract meaningful text from common HTML elements like paragraphs (`<p>`) and headings (`<h1>` to `<h6>`).
+
+    def scrape_article_text(url):
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status() # Raise an HTTPError for bad responses (4xx or 5xx)
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Remove script and style elements
+        for script_or_style in soup(['script', 'style']):
+            script_or_style.extract()
+
+        # Attempt to find the main content area (common patterns)
+        main_content = soup.find('article') or soup.find('main') or soup.find(class_=lambda c: c and ('content' in c or 'article' in c or 'main' in c))
+        
+        if main_content:
+            # Extract text from paragraph tags within the main content
+            paragraphs = main_content.find_all('p')
+            text = ' '.join([p.get_text(separator=' ', strip=True) for p in paragraphs])
+        else:
+            # Fallback: extract all visible text if main content not found
+            text = soup.get_text(separator=' ', strip=True)
+            
+        # Clean up multiple spaces and newlines
+        text = ' '.join(text.split())
+        return text
+
+    except requests.exceptions.Timeout:
+        return f"Error: Request timed out for {url}"
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching {url}: {e}"
+    except Exception as e:
+        return f"An unexpected error occurred while scraping {url}: {e}"
+
+        # Now, let's iterate through the list of URLs, scrape the article text for each, and store the results.
+
+        scraped_data = []
+
+if url_list:
+    for i, url in enumerate(url_list):
+        print(f"Scraping URL {i+1}/{len(url_list)}: {url}")
+        article_text = scrape_article_text(url)
+        scraped_data.append({'URL': url, 'Article_Text': article_text})
+else:
+    print("No URLs to scrape.")
+
+# Display a preview of the scraped data
+if scraped_data:
+    display(pd.DataFrame(scraped_data).head())
+
+    # Finally, we'll convert the collected data into a pandas DataFrame and export it to a CSV file named `scraped_articles.csv`.
+
+    if scraped_data:
+    df_scraped = pd.DataFrame(scraped_data)
+    output_csv_file = 'scraped_articles.csv'
+    df_scraped.to_csv(output_csv_file, index=False, encoding='utf-8')
+    print(f"Scraping complete! Data saved to '{output_csv_file}'")
+else:
+    print("No data to save to CSV.")
+    
+6. Gemini/Colab will create a csv file called "scraped_articles.csv" or something similar in the file system on the left. You can download it and inspect the results. You should see an output like this:
 
          ![][image3](Images/Guardian/output.jpg)
-
-   Open your spreadsheet:
-
-   
 
 ![image4](Images/Guardian/scraped_articles.png)
 
 ### 3\. Clean your data
+You may want to clean up the output of article text to make it more usable before you perform analysis. OpenRefine is a tool you can use for data cleaning. 
 
 #### Use OpenRefine to convert the dates to eliminate unwanted whitespace.
 
