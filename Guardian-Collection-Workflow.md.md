@@ -2,7 +2,7 @@
 
 ### ---
 
-## Using the Guardian API for searching & ChatGPT to write Python scripts to gather the full text of the newspaper articles
+## Using the Guardian API for searching & GenAI to write Python scripts to gather the full text of the newspaper articles
 
 ## Requirements:
 
@@ -29,11 +29,11 @@
     * *page-size* (set at 200 to show the maximum number of hits per search-results page)  
     * *from-date* & *to-date* (in the format, e.g., "06-01-2021 to 06-01-2024")  
     * *api-key* (your *Guardian* api key)  
-      At the bottom of the *Guardian* API Console web page, you'll instantly see a live view of the JSON returned by your search parameters, including the URLs for the pages found.  The maximum number of hits on a single search-results page is 199\. Select and copy the JSON results. Copy beginning with the first curly bracket "**{**"  to the last curly bracket" **}**"![JSON results shown in The Guardian&\#39;s API Console](Images/Guardian/Guardian_JSON.png)  
+      At the bottom of the *Guardian* API Console web page, you'll instantly see a live view of the JSON returned by your search parameters, including the URLs for the pages found.  The maximum number of hits on a single search-results page is 199\. Select and copy the JSON, starting from "results." [JSON results shown in The Guardian&\#39;s API Console](Images/Guardian/Guardian_JSON.png)  
       For multiple search-results pages:  
     * The JSON search results start with metadata that includes, the number of the current search-results page and the total number of search-results pages (e.g., current Page: 2, pages: 2). This shows how many total results there are and whether you need to gather the JSON on extra search results pages.  
     * If so, after harvesting the results of one search-results page (by copying the JSON into a "guardian-json" spreadsheet through the process described below), you can use the "page" field in the Guardian API Console's search form to request the next page of search results.  
-    * You'll then need to copy and accumulate the JSON from each set of search-results at the bottom of the JSON previously collect in the "guardian-json" spreadsheet.
+    * You'll then need to copy and accumulate the JSON from each set of search-results at the bottom of the JSON previously collected in the "guardian-json" spreadsheet.
 
 * Collect the URLs of the links from the *Guardian* search in Excel:  
 1. Paste the JSON search results from the steps above into a blank spreadsheet, e.g., and Excel sheet (using "paste special" to paste without formatting). Name the spreadsheet "guardian-json.xlxs" and save it among your working data.   
