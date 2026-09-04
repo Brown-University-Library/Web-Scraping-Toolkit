@@ -143,13 +143,13 @@ else:
     print("No data to save to CSV.")
   ```
     
-6. Gemini/Colab will create a csv file called "scraped_articles.csv" or something similar in the file system on the left. You can download it and inspect the results. You should see an output like this:
+5. Gemini/Colab will create a csv file called "scraped_articles.csv" or something similar in the file system on the left. You can download it and inspect the results. You should see an output like this:
 
          ![][image3](Images/Guardian/output.jpg)
 
 ![image4](Images/Guardian/scraped_articles.png)
 
-### 3\. Clean your data
+### 3. Clean your data
 You may want to clean up the output of article text to make it more usable before you perform analysis. OpenRefine is a tool you can use for data cleaning. 
 
 #### Use OpenRefine to convert the dates to eliminate unwanted whitespace.
