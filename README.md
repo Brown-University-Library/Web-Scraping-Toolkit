@@ -1,4 +1,5 @@
 # Web Scraping Toolkit
+*Last updated September 2026*
 
 ## What can I do with this toolkit?
 
