@@ -10,7 +10,7 @@ If an online resource has an Application Programming Interface (or API), you can
 
 ## Install wget:
 
-Windows: Read the following tutorial “Installing Cygwin Tutorial.” Choose the wget module option when prompted.
+Windows: Follow the [Setting Up Cygwin](https://cygwin.com/cygwin/cygwin-ug-net/setup-net.html) guide. Choose the wget module option when prompted.
 
 MacOSX: MacOSX comes with a terminal installed. It’s probably in your Applications folder or in your Applications > Utilities > Terminal folder. This link may help you depending on your Mac version. If you are running a different version than High Sierra, google your version and “install wget.” This will probably populate information on how to install wget with your system: Wget installation for MacOS High Sierra
 
