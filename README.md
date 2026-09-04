@@ -6,7 +6,7 @@ This toolkit helps you go from **a research question** to **a usable text datase
 
 | I want to… | Start here |
 |---|---|
-| Collect articles from **The New York Times** | [NYT Workflow →](NYT-Scraping-Workflow.md) |
+| Collect article metadata from **The New York Times** | [NYT Workflow →](NYT-Scraping-Workflow.md) |
 | Collect articles from **The Guardian** | [Guardian Workflow →](Guardian-Collection-Workflow.md.md) |
 | Download full-text items from **Archive.org** | [Internet Archive Workflow →](Internet-Archive-API-Workflow.md) |
 | Learn **web scraping from scratch** with Python | [Beautiful Soup Tutorial →](Beautiful-Soup-Tutorial.md.md) |
@@ -26,7 +26,7 @@ Most workflows in this toolkit follow the same general pattern:
    to find articles)   as a CSV file)      extract the text)       topic modeling, etc.)
 ```
 
-For example, the NYT workflow uses the NYT Archive API to search for articles (step 1), saves the matching URLs into a CSV (step 2), then runs a Python scraper to visit each URL and attempt to collect the article text (step 3). You then take the resulting dataset into whatever analysis tool you prefer (step 4).
+For example, the NYT workflow uses the NYT Archive API to search for articles and metadata (step 1), saves the matching URLs into a CSV (step 2), then runs a Python scraper to visit each URL and attempt to collect the article text (step 3). You then take the resulting dataset into whatever analysis tool you prefer (step 4).
 
 The toolkit covers steps 1–3. For step 4, check out the library's [resources on text mining](https://library.brown.edu/).
 
@@ -69,9 +69,9 @@ The optional `python-dotenv` package lets the login scraper load credentials fro
 
 ### New York Times
 
-The NYT workflow has two phases: **searching** for articles using the NYT Archive API and **scraping** the article text.
+The NYT workflow has two phases: **searching** for articles and gathering article metadata using the NYT Archive API and **scraping** the article text. In this workflow, you can work from the command line or a Python environment.
 
-**Searching:** You'll use [Frank Donnelly's script](https://github.com/Brown-University-Library/geodata_api_tutorials/blob/main/nytimes/nyt_archives_api.py) from the Brown University Library. It queries the NYT Archive API and saves matching article metadata, including URLs, to a CSV file.
+**Searching:** You'll use [Frank Donnelly's script](https://github.com/Brown-University-Library/geodata_api_tutorials/blob/main/nytimes/nyt_archives_api.py) from the Brown University Library. It queries the NYT Archive API and saves matching article metadata, including URLs, headline, byline, date, abstract, and lead paragraph to a CSV file.
 
 **Scraping:** You then feed those URLs into one of two scrapers:
 
@@ -84,40 +84,15 @@ Both scrapers read URLs from `nytlinks.csv` and write results to `articlefulltex
 
 > **Note:** Many NYT pages require JavaScript and sit behind a paywall. The basic scraper will mark these as `[UNAVAILABLE]` rather than silently saving error text. A valid subscription may improve access, but the login scraper is not guaranteed to retrieve every page. NYT login screens, page selectors, CAPTCHA requirements, and terms of access can change.
 
-#### Run the Playwright login scraper
-
-1. Create `nytlinks.csv` in the repository root, with one article URL per row. A header named `Article Url` is optional.
-
-2. Set your NYT credentials as environment variables. Do not put credentials in the script or commit them to Git:
-
-   ```bash
-   export NYT_EMAIL="you@example.com"
-   export NYT_PASSWORD="your-password"
-   ```
-
-3. From the repository root, run:
-
-   ```bash
-   python3 code/nytscraper_login.py --input nytlinks.csv --output articlefulltext.csv
-   ```
-
-4. If login requires 2FA, CAPTCHA, or another manual step, display the browser:
-
-   ```bash
-   python3 code/nytscraper_login.py --headed --input nytlinks.csv --output articlefulltext.csv
-   ```
-
-The output is written to `articlefulltext.csv`. For script-level details, see [`code/readme.md`](code/readme.md).
-
 📖 **[Full NYT workflow guide →](NYT-Scraping-Workflow.md)**
 
 ### The Guardian
 
-The Guardian workflow uses the Guardian's open API to search for articles, then scrapes the full text from each result.
+The Guardian workflow uses the Guardian's open API to search for articles, then uses Gemini in Google Colab to generate a script that scrapes the full text from each result. For this workflow, you do not need to work from a Python coding environment or the command line, just Colab, a cloud-based tool for writing and running code. 
 
 1. Search the [Guardian API Explorer](http://open-platform.theguardian.com/explore/) and copy the JSON results.
-2. Save the JSON as `query_result.json`.
-3. Run `code/guardian_scraping.py` to scrape full text into `guardian_results.csv`.
+2. Paste JSON into a spreadsheet and use find and replace to clean it up to just a list of URLS
+3. Upload the URLs to a Colab notebook and prompt Gemini to create a scraping script for full text
 
 📖 **[Full Guardian workflow guide →](Guardian-Collection-Workflow.md.md)**
 
