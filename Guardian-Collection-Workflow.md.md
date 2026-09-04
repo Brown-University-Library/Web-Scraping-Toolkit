@@ -137,6 +137,8 @@ if scraped_data:
     print(f"Scraping complete! Data saved to '{output_csv_file}'")
 else:
     print("No data to save to CSV.")
+
+    ```
     
 6. Gemini/Colab will create a csv file called "scraped_articles.csv" or something similar in the file system on the left. You can download it and inspect the results. You should see an output like this:
 
