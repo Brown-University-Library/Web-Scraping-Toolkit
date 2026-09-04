@@ -39,7 +39,8 @@
 1. Paste the JSON search results from the steps above into a blank spreadsheet, e.g., and Excel sheet (using "paste special" to paste without formatting). Name the spreadsheet "guardian-json.xlxs" and save it among your working data.   
 1. Select the first column, then go to Data view ("Data" tab in Excel) and click on "Filter."   
 1. Cell A1 will now show a little drop-down arrow.  Click on the arrow, and choose: Text Filters \> Begins with.  Type in webUrl. Then click "OK" to filter the worksheet to show only the rows beginning with this expression.   
-1. Next do a search-and-replace in Excel to replace ```webUrl:"``` with nothing. This will leave you with a visible column of URLs without extraneous matter.  
+1. Next do a search-and-replace in Excel to replace ```
+webUrl:" ``` with nothing and then ```"``` with nothing. This will leave you with a visible column of URLs without extraneous matter.  
 1. Finally, copy the column of URLs, excluding any rows with only a curly bracket, and save to a text file called "urls.txt" in your working data.
 
 ### 2. Scrape articles using ChatGPT and Google Colab
